@@ -403,4 +403,16 @@ class CollectionTest extends TestCase
         $result = $collection->random(5);
         var_dump($result);
     }
+
+    public function testCheckingExistence()
+    {
+        $collection = collect([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+        $this->assertTrue($collection->isNotEmpty());
+        $this->assertFalse($collection->isEmpty());
+        $this->assertTrue($collection->contains(3));
+        $this->assertFalse($collection->contains(11));
+        $this->assertTrue($collection->contains(function ($value, $key) {
+            return $value == 8;
+        }));
+    }
 }
