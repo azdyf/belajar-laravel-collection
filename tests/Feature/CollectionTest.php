@@ -6,6 +6,7 @@ use App\Data\Person;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use function PHPUnit\Framework\assertEquals;
 
 class CollectionTest extends TestCase
 {
@@ -242,5 +243,69 @@ class CollectionTest extends TestCase
         $this->assertTrue($collection->contains(function ($value, $key) {
             return $value == 'Hasyim';
         }));
+    }
+
+    public function testGrouping()
+    {
+        $collection = collect([
+            [
+                'name' => 'Azdy',
+                'department' => 'IT'
+            ],
+            [
+                'name' => 'Fahmi',
+                'department' => 'IT'
+            ],
+            [
+                'name' => 'Azkan',
+                'department' => 'HR'
+            ],
+        ]);
+
+        $result = $collection->groupBy('department');
+
+        var_dump($result->all());
+
+        $this->assertEquals([
+            'IT' => collect([
+                [
+                    'name' => 'Azdy',
+                    'department' => 'IT'
+                ],
+                [
+                    'name' => 'Fahmi',
+                    'department' => 'IT'
+                ]
+            ]),
+            'HR' => collect([
+                [
+                    'name' => 'Azkan',
+                    'department' => 'HR'
+                ]
+            ])
+        ], $result->all());
+
+        $result = $collection->groupBy(function ($value, $key) {
+            return strtolower($value['department']);
+        });
+
+        $this->assertEquals([
+            'it' => collect([
+                [
+                    'name' => 'Azdy',
+                    'department' => 'IT'
+                ],
+                [
+                    'name' => 'Fahmi',
+                    'department' => 'IT'
+                ]
+            ]),
+            'hr' => collect([
+                [
+                    'name' => 'Azkan',
+                    'department' => 'HR'
+                ]
+            ])
+        ], $result->all());
     }
 }
