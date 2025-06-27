@@ -234,4 +234,13 @@ class CollectionTest extends TestCase
             'Gibran' => 80
         ], $result2->all());
     }
+
+    public function testTesting()
+    {
+        $collection = collect(['Azdy', 'Fahmi', 'Hasyim']);
+        $this->assertTrue($collection->contains('Fahmi'));
+        $this->assertTrue($collection->contains(function ($value, $key) {
+            return $value == 'Hasyim';
+        }));
+    }
 }
