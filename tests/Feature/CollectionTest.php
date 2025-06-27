@@ -392,4 +392,15 @@ class CollectionTest extends TestCase
         });
         $this->assertEquals(4, $result);
     }
+
+    public function testRandom()
+    {
+        $collection = collect([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+
+        $result = $collection->random();
+        $this->assertTrue(in_array($result, $collection->all()));
+
+        $result = $collection->random(5);
+        var_dump($result);
+    }
 }
